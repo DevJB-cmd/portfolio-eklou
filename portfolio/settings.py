@@ -57,6 +57,8 @@ MIDDLEWARE = [
     "monportfolio.middleware.SecurityHeadersMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = "portfolio.urls"
@@ -76,7 +78,7 @@ TEMPLATES = [
         },
     },
 ]
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WSGI_APPLICATION = "portfolio.wsgi.application"
 
 
