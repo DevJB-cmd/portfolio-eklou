@@ -24,5 +24,7 @@ urlpatterns = [
     path('', include('monportfolio.urls')), 
 ]
 
-if  settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve uploaded media files.
+# In production at scale, prefer object storage (S3/Cloudinary), but this keeps
+# media URLs working on Render for small projects.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
