@@ -46,11 +46,8 @@ pandas==2.3.3
 pdfminer.six==20260107
 pillow==11.0.0
 protobuf==6.33.2
-psycopg==3.2.9
-psycopg-binary==3.2.9
-psycopg2-binary==2.9.11
-psycopg2==2.9.11
-psycopg2-binary==2.9.11
+psycopg==3.3.3
+psycopg-binary==3.3.3
 pycairo==1.29.0
 pycparser==2.23
 pydyf==0.12.1
