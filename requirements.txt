@@ -48,6 +48,7 @@ pillow==11.0.0
 protobuf==6.33.2
 psycopg==3.2.9
 psycopg-binary==3.2.9
+psycopg2-binary==2.9.11
 psycopg2==2.9.11
 psycopg2-binary==2.9.11
 pycairo==1.29.0
