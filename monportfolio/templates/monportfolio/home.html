@@ -1,0 +1,503 @@
+{% extends "monportfolio/base.html" %}
+{% load static %}
+{% block title %}Accueil{% endblock %}
+{% block body_class %}index-page{% endblock %}
+
+{% block content %}
+<header id="header" class="header d-flex align-items-center fixed-top">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+      {% if profile and profile.logo %}
+        <img src="{{ profile.logo.url }}" alt="{% if profile %}{{ profile.full_name }}{% else %}Logo{% endif %}">
+      {% endif %}
+      <h1 class="sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</h1>
+    </a>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="#hero" class="active">Accueil</a></li>
+        <li><a href="#about">A propos</a></li>
+        <li><a href="#resume">Resume</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="{% url 'events' %}">Evenements</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+    <a class="btn-getstarted" href="#about">Commencer</a>
+  </div>
+</header>
+
+<main class="main">
+  <section id="hero" class="hero section dark-background">
+    {% if profile and profile.hero_image %}
+      <img src="{{ profile.hero_image.url }}" alt="" data-aos="fade-in">
+    {% else %}
+      <img src="{% static 'monportfolio/assets/img/profile/profile-bg-5.webp' %}" alt="" data-aos="fade-in">
+    {% endif %}
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 text-center">
+          <h2>Bonjour, je suis {% if profile %}{{ profile.full_name }}{% else %}Votre nom{% endif %}</h2>
+          <p>Je suis <span class="typed" data-typed-items="{{ typed_items }}"></span><span class="typed-cursor" aria-hidden="true"></span></p>
+          {% if social_links %}
+            <div class="social-links">
+              {% for link in social_links %}
+                {% with platform=link.platform|lower %}
+                  <a href="{{ link.url }}">
+                    {% if "linkedin" in platform %}<i class="bi bi-linkedin"></i>{% elif "github" in platform %}<i class="bi bi-github"></i>{% elif "instagram" in platform %}<i class="bi bi-instagram"></i>{% elif "facebook" in platform %}<i class="bi bi-facebook"></i>{% elif "twitter" in platform or "x" == platform %}<i class="bi bi-twitter-x"></i>{% else %}<i class="bi bi-link-45deg"></i>{% endif %}
+                  </a>
+                {% endwith %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">A propos</span>
+      <h2>A propos de moi</h2>
+      <p>{% if profile %}{{ profile.bio|truncatewords:30 }}{% else %}Ajoutez votre biographie de profil dans l'administration Django pour afficher votre introduction ici.{% endif %}</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-5">
+        <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="150">
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">
+                {% if profile and profile.cv_image %}
+                  <img src="{{ profile.cv_image.url }}" class="img-fluid" alt="">
+                {% elif profile and profile.profile_image %}
+                  <img src="{{ profile.profile_image.url }}" class="img-fluid" alt="">
+                {% else %}
+                  <img src="{% static 'monportfolio/assets/img/profile/profile-square-3.webp' %}" class="img-fluid" alt="">
+                {% endif %}
+                <div class="status-indicator"></div>
+              </div>
+              <h3>{% if profile %}{{ profile.full_name }}{% else %}Votre nom{% endif %}</h3>
+              <span class="role">{% if profile %}{{ profile.title }}{% else %}Votre role{% endif %}</span>
+            </div>
+
+            <div class="profile-stats">
+              <div class="stat-item">
+                <h4>{{ projects|length }}</h4>
+                <p>Projets</p>
+              </div>
+              <div class="stat-item">
+                <h4>{{ years_experience }}+</h4>
+                <p>Years</p>
+              </div>
+              <div class="stat-item">
+                <h4>{{ certifications|length }}</h4>
+                <p>Certifications</p>
+              </div>
+            </div>
+
+            <div class="profile-actions">
+              {% if profile and profile.cv %}
+                <a href="{{ profile.cv.url }}" class="btn-primary"><i class="bi bi-download"></i> Telecharger CV</a>
+              {% endif %}
+              <a href="#contact" class="btn-secondary"><i class="bi bi-envelope"></i> Contact</a>
+            </div>
+
+            <div class="social-connect">
+              {% for link in social_links|slice:":4" %}
+                {% with platform=link.platform|lower %}
+                  <a href="{{ link.url }}">
+                    {% if "linkedin" in platform %}<i class="bi bi-linkedin"></i>{% elif "github" in platform %}<i class="bi bi-github"></i>{% elif "instagram" in platform %}<i class="bi bi-instagram"></i>{% elif "facebook" in platform %}<i class="bi bi-facebook"></i>{% elif "twitter" in platform or "x" == platform %}<i class="bi bi-twitter-x"></i>{% else %}<i class="bi bi-link-45deg"></i>{% endif %}
+                  </a>
+                {% endwith %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8" data-aos="fade-left" data-aos-delay="200">
+          <div class="content-wrapper">
+            <div class="bio-section">
+              <div class="section-tag">A propos</div>
+              <h2>Transformer des idees en realite numerique</h2>
+              <p>{% if profile %}{{ profile.bio }}{% else %}Ajoutez votre biographie complete dans l'administration Django pour alimenter cette section.{% endif %}</p>
+            </div>
+
+            <div class="details-grid">
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="250">
+                <i class="bi bi-briefcase"></i>
+                <div class="detail-content">
+                  <span>Experience</span>
+                  <strong>{{ years_experience }}+ Years</strong>
+                </div>
+              </div>
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
+                <i class="bi bi-mortarboard"></i>
+                <div class="detail-content">
+                  <span>Education</span>
+                  <strong>{% if educations %}{{ educations.0.degree }}{% else %}Ajouter dans l'administration{% endif %}</strong>
+                </div>
+              </div>
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
+                <i class="bi bi-geo-alt"></i>
+                <div class="detail-content">
+                  <span>Based In</span>
+                  <strong>{% if profile and profile.location %}{{ profile.location }}{% else %}Ajouter dans l'administration{% endif %}</strong>
+                </div>
+              </div>
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="100">
+                <i class="bi bi-envelope"></i>
+                <div class="detail-content">
+                  <span>Email</span>
+                  <strong>{% if profile %}{{ profile.email }}{% else %}Ajouter dans l'administration{% endif %}</strong>
+                </div>
+              </div>
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="150">
+                <i class="bi bi-phone"></i>
+                <div class="detail-content">
+                  <span>Phone</span>
+                  <strong>{% if profile and profile.phone %}{{ profile.phone }}{% else %}Ajouter dans l'administration{% endif %}</strong>
+                </div>
+              </div>
+              <div class="detail-item" data-aos="fade-up" data-aos-delay="200">
+                <i class="bi bi-calendar-check"></i>
+                <div class="detail-content">
+                  <span>Availability</span>
+                  <strong>Disponible</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="skills-showcase" data-aos="fade-up" data-aos-delay="250">
+              <div class="section-tag">Competences cles</div>
+              <h3>Maitrise technique</h3>
+              <div class="skills-list skills-animation">
+                {% for skill in skills %}
+                  <div class="skill-item">
+                    <div class="skill-info">
+                      <span class="skill-name">{{ skill.name }}</span>
+                      <span class="skill-percent">{{ skill.percentage }}%</span>
+                    </div>
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="{{ skill.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                {% empty %}
+                  <p>Ajoutez vos competences dans l'administration Django.</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="resume" class="resume section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Resume</span>
+      <h2>Resume</h2>
+      <p>Votre experience professionnelle et votre formation depuis l'admin Django sont affichees ci-dessous.</p>
+    </div>
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-5">
+        <div class="col-lg-6">
+          <div class="experience-section">
+            <div class="section-header" data-aos="fade-right" data-aos-delay="200">
+              <div class="header-content">
+                <span class="section-badge">Experience</span>
+                <h2>Parcours professionnel</h2>
+              </div>
+            </div>
+            <div class="experience-cards">
+              {% for experience in experiences %}
+                <div class="exp-card {% if experience.currently_working %}featured{% endif %}" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="card-header">
+                    <div class="company-logo"><i class="bi bi-buildings"></i></div>
+                    {% if experience.currently_working %}<div class="period-badge">En cours</div>{% endif %}
+                  </div>
+                  <div class="card-body">
+                    <h3>{{ experience.position }}</h3>
+                    <p class="company-name">{{ experience.company }}</p>
+                    <span class="duration">{{ experience.start_date|date:"Y" }} - {% if experience.currently_working %}Aujourd'hui{% elif experience.end_date %}{{ experience.end_date|date:"Y" }}{% else %}Aujourd'hui{% endif %}</span>
+                    <p class="description">{{ experience.description }}</p>
+                  </div>
+                </div>
+              {% empty %}
+                <p>Ajoutez vos experiences dans l'administration Django.</p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="education-section">
+            <div class="section-header" data-aos="fade-left" data-aos-delay="200">
+              <div class="header-content">
+                <span class="section-badge">Formation</span>
+                <h2>Parcours academique</h2>
+              </div>
+            </div>
+            <div class="education-timeline" data-aos="fade-left" data-aos-delay="300">
+              <div class="timeline-track">
+                {% for education in educations %}
+                  <div class="timeline-item">
+                    <div class="timeline-marker"><i class="bi bi-mortarboard-fill"></i></div>
+                    <div class="timeline-content">
+                      <div class="education-meta">
+                        <span class="year-range">{{ education.start_year }} - {% if education.end_year %}{{ education.end_year }}{% else %}Aujourd'hui{% endif %}</span>
+                        <span class="degree-level">{{ education.degree }}</span>
+                      </div>
+                      <h4>{{ education.field_of_study }}</h4>
+                      <p class="institution">{{ education.institution }}</p>
+                    </div>
+                  </div>
+                {% empty %}
+                  <p>Ajoutez votre parcours de formation dans l'administration Django.</p>
+                {% endfor %}
+
+                {% if certifications %}
+                  <div class="timeline-item">
+                    <div class="timeline-marker"><i class="bi bi-patch-check-fill"></i></div>
+                    <div class="timeline-content">
+                      <div class="education-meta">
+                        <span class="year-range">Certifications</span>
+                        <span class="degree-level">Professional</span>
+                      </div>
+                      <h4>Professional Certifications</h4>
+                      <div class="certifications-list">
+                        {% for cert in certifications %}
+                          <div class="cert-item">
+                            <span class="cert-name">{{ cert.title }}</span>
+                            <span class="cert-year">{{ cert.date_obtained|date:"Y" }}</span>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Services</span>
+      <h2>Services</h2>
+      <p>Services geres depuis l'administration Django.</p>
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        {% for service in services %}
+          <div class="col-lg-3 col-md-6" data-aos="zoom-in" data-aos-delay="{{ forloop.counter|add:'0' }}00">
+            <div class="service-item {% if forloop.counter == 2 %}featured{% endif %}">
+              {% if forloop.counter == 2 %}<div class="featured-tag">A la une</div>{% endif %}
+              <div class="icon-wrapper"><i class="bi {{ service.icon|default:'bi-briefcase' }}"></i></div>
+              <h4>{{ service.title }}</h4>
+              <p>{{ service.description }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <p>Ajoutez des services dans l'administration Django.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Portfolio</span>
+      <h2>Portfolio</h2>
+      <p>Les projets se chargent automatiquement depuis l'administration Django.</p>
+    </div>
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+        <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="200">
+          <li data-filter="*" class="filter-active">Tous</li>
+          {% for category in portfolio_categories %}
+            <li data-filter=".filter-{{ category.slug }}">{{ category.name }}</li>
+          {% endfor %}
+        </ul>
+
+        <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="300">
+          {% for project in projects %}
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item {{ project.filter_class }}">
+              <div class="portfolio-card">
+                <div class="portfolio-image-container">
+                  {% if project.image %}
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid" loading="lazy">
+                  {% else %}
+                    <img src="{% static 'monportfolio/assets/img/portfolio/portfolio-1.webp' %}" alt="{{ project.title }}" class="img-fluid" loading="lazy">
+                  {% endif %}
+                  <div class="portfolio-overlay">
+                    <div class="portfolio-info">
+                      <span class="project-category">{{ project.display_category }}</span>
+                      <h4>{{ project.title }}</h4>
+                    </div>
+                    <div class="portfolio-actions">
+                      {% if project.image %}
+                        <a href="{{ project.image.url }}" class="glightbox portfolio-link"><i class="bi bi-plus-lg"></i></a>
+                      {% endif %}
+                      <a href="{% url 'project_detail' project.id %}" class="portfolio-details"><i class="bi bi-arrow-right"></i></a>
+                    </div>
+                  </div>
+                </div>
+                <div class="portfolio-meta">
+                  <div class="project-tags">
+                    {% for tag in project.tags %}
+                      <span class="tag">{{ tag }}</span>
+                    {% empty %}
+                      <span class="tag">Projet</span>
+                    {% endfor %}
+                  </div>
+                  <div class="project-year">{{ project.created_at|date:"Y" }}</div>
+                </div>
+              </div>
+            </div>
+          {% empty %}
+            <p>Ajoutez des projets dans l'administration Django.</p>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="portfolio-bottom" data-aos="fade-up" data-aos-delay="400">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h3>Ce que vous voyez vous plait ?</h3>
+            <p>Contactez-moi pour discuter de votre prochain projet.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <a href="#contact" class="btn btn-accent">Travaillons ensemble</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Contact</span>
+      <h2>Contact</h2>
+      <p>Envoyez un message directement avec ce formulaire.</p>
+    </div>
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-4">
+          <div class="info-item">
+            <div class="icon-wrapper"><i class="bi bi-geo-alt"></i></div>
+            <div>
+              <h3>Address</h3>
+              <p>{% if profile and profile.location %}{{ profile.location }}{% else %}Ajoutez l'adresse dans l'administration{% endif %}</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="icon-wrapper"><i class="bi bi-telephone"></i></div>
+            <div>
+              <h3>Call Me</h3>
+              <p>{% if profile and profile.phone %}{{ profile.phone }}{% else %}Ajoutez le telephone dans l'administration{% endif %}</p>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="icon-wrapper"><i class="bi bi-envelope"></i></div>
+            <div>
+              <h3>Email Me</h3>
+              <p>{% if profile %}{{ profile.email }}{% else %}Ajoutez l'email dans l'administration{% endif %}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <form action="{% url 'contact' %}" method="post" class="php-email-form">
+            {% csrf_token %}
+            <div class="row gy-4">
+              <div class="col-md-6">
+                <input type="text" name="name" class="form-control" placeholder="Votre nom" required>
+              </div>
+              <div class="col-md-6">
+                <input type="email" class="form-control" name="email" placeholder="Votre email" required>
+              </div>
+              <div class="col-md-12">
+                <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+              </div>
+              <div class="col-md-12">
+                <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+              </div>
+              <div class="col-md-12 text-center">
+                  <button type="submit">Envoyer le message</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <div class="container footer-top">
+    <div class="row gy-4">
+      <div class="col-lg-5 col-md-12 footer-about">
+        <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+          {% if profile and profile.logo %}
+            <img src="{{ profile.logo.url }}" alt="{% if profile %}{{ profile.full_name }}{% else %}Logo{% endif %}">
+          {% endif %}
+          <span class="sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</span>
+        </a>
+        <p>{% if profile %}{{ profile.bio|truncatewords:25 }}{% else %}Description de portfolio geree depuis votre bio dans l'administration.{% endif %}</p>
+        <div class="social-links d-flex mt-4">
+          {% for link in social_links|slice:":4" %}
+            {% with platform=link.platform|lower %}
+              <a href="{{ link.url }}">
+                {% if "linkedin" in platform %}<i class="bi bi-linkedin"></i>{% elif "github" in platform %}<i class="bi bi-github"></i>{% elif "instagram" in platform %}<i class="bi bi-instagram"></i>{% elif "facebook" in platform %}<i class="bi bi-facebook"></i>{% elif "twitter" in platform or "x" == platform %}<i class="bi bi-twitter-x"></i>{% else %}<i class="bi bi-link-45deg"></i>{% endif %}
+              </a>
+            {% endwith %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Liens utiles</h4>
+        <ul>
+          <li><a href="#hero">Accueil</a></li>
+          <li><a href="#about">A propos</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="{% url 'events' %}">Evenements</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Nos services</h4>
+        <ul>
+          {% for service in services|slice:":5" %}
+            <li><a href="#services">{{ service.title }}</a></li>
+          {% empty %}
+            <li><a href="#services">Ajoutez des services dans l'administration</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+        <h4>Contact</h4>
+        <p>{% if profile and profile.location %}{{ profile.location }}{% else %}Ajoutez l'adresse dans l'administration{% endif %}</p>
+        <p class="mt-4"><strong>Telephone:</strong> <span>{% if profile and profile.phone %}{{ profile.phone }}{% else %}Ajoutez le telephone dans l'administration{% endif %}</span></p>
+        <p><strong>Email:</strong> <span>{% if profile %}{{ profile.email }}{% else %}Ajoutez l'email dans l'administration{% endif %}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container copyright text-center mt-4">
+    <p>&copy; <span>Copyright</span> <strong class="px-1 sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</strong> <span>Tous droits reserves</span></p>
+  </div>
+</footer>
+
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+{% endblock %}

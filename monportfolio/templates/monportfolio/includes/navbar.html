@@ -1,0 +1,17 @@
+<header id="header" class="header fixed-top">
+  <div class="container d-flex align-items-center justify-content-between">
+
+    <a href="{% url 'home' %}" class="logo">
+      <h1>{{ profile.full_name }}</h1>
+    </a>
+
+    <nav id="navbar" class="navbar">
+      <ul>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li><a href="{% url 'blog' %}">Blog</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </nav>
+
+  </div>
+</header>

@@ -1,0 +1,90 @@
+{% extends "monportfolio/base.html" %}
+{% load static %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block body_class %}index-page{% endblock %}
+
+{% block content %}
+<header id="header" class="header d-flex align-items-center fixed-top">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+      {% if profile and profile.logo %}
+        <img src="{{ profile.logo.url }}" alt="{% if profile %}{{ profile.full_name }}{% else %}Logo{% endif %}">
+      {% endif %}
+      <h1 class="sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</h1>
+    </a>
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li><a href="{% url 'events' %}" class="active">Evenements</a></li>
+        <li><a href="{% url 'home' %}#contact">Contact</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+  <section class="page-title section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">{{ event.get_event_type_display }}</span>
+      <h2>{{ event.title }}</h2>
+      <p>{{ event.event_date|date:"d/m/Y" }}{% if event.location %} - {{ event.location }}{% endif %}</p>
+      <p>{{ event.description }}</p>
+    </div>
+  </section>
+
+  <section class="portfolio section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        {% for media in event.media_items.all %}
+          <div class="col-lg-4 col-md-6">
+            <div class="portfolio-card">
+              <div class="portfolio-image-container">
+                {% if media.media_type == "image" and media.image %}
+                  <img src="{{ media.image.url }}" alt="{{ media.caption|default:event.title }}" class="img-fluid" loading="lazy">
+                  <div class="portfolio-overlay">
+                    <div class="portfolio-info">
+                      <span class="project-category">Photo</span>
+                      <h4>{{ media.caption|default:event.title }}</h4>
+                    </div>
+                    <div class="portfolio-actions">
+                      <a href="{{ media.image.url }}" class="glightbox portfolio-link"><i class="bi bi-plus-lg"></i></a>
+                    </div>
+                  </div>
+                {% elif media.media_type == "video" and media.video_file %}
+                  <video class="img-fluid" controls preload="metadata">
+                    <source src="{{ media.video_file.url }}">
+                  </video>
+                {% elif media.media_type == "video" and media.video_url %}
+                  <div class="p-3 bg-dark text-white">
+                    <p class="mb-2">Video externe</p>
+                    <a class="btn btn-sm btn-light" href="{{ media.video_url }}" target="_blank" rel="noopener">Voir la video</a>
+                  </div>
+                {% endif %}
+              </div>
+              {% if media.caption %}
+                <div class="portfolio-meta">
+                  <div class="project-tags">
+                    <span class="tag">{{ media.caption }}</span>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <p>Aucun media pour cet evenement. Ajoutez photos/videos depuis l'administration.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <div class="container copyright text-center mt-4">
+    <p>&copy; <strong class="px-1 sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</strong> <span>Tous droits reserves</span></p>
+  </div>
+</footer>
+
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+{% endblock %}

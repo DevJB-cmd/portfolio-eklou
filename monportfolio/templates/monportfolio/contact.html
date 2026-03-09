@@ -1,0 +1,32 @@
+{% extends "monportfolio/base.html" %}
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h2>Contact</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <input type="text" name="name" placeholder="Nom" class="form-control mb-1" value="{{ form.name.value|default:'' }}" required>
+      {% if form.name.errors %}<small class="text-danger d-block mb-2">{{ form.name.errors.0 }}</small>{% endif %}
+
+      <input type="email" name="email" placeholder="Email" class="form-control mb-1" value="{{ form.email.value|default:'' }}" required>
+      {% if form.email.errors %}<small class="text-danger d-block mb-2">{{ form.email.errors.0 }}</small>{% endif %}
+
+      <input type="text" name="subject" placeholder="Sujet" class="form-control mb-1" value="{{ form.subject.value|default:'' }}" required>
+      {% if form.subject.errors %}<small class="text-danger d-block mb-2">{{ form.subject.errors.0 }}</small>{% endif %}
+
+      <textarea name="message" class="form-control mb-1" rows="5" required>{{ form.message.value|default:'' }}</textarea>
+      {% if form.message.errors %}<small class="text-danger d-block mb-2">{{ form.message.errors.0 }}</small>{% endif %}
+
+      <button class="btn btn-primary">Envoyer</button>
+    </form>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "monportfolio/base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <h2>{{ project.title }}</h2>
+    <img src="{{ project.image.url }}" class="img-fluid">
+    <p>{{ project.description }}</p>
+
+    {% if project.github_link %}
+      <a href="{{ project.github_link }}" class="btn btn-dark">Github</a>
+    {% endif %}
+
+    {% if project.live_link %}
+      <a href="{{ project.live_link }}" class="btn btn-success">Voir en ligne</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

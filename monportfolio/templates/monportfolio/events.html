@@ -1,0 +1,86 @@
+{% extends "monportfolio/base.html" %}
+{% load static %}
+{% block title %}Evenements{% endblock %}
+{% block body_class %}index-page{% endblock %}
+
+{% block content %}
+<header id="header" class="header d-flex align-items-center fixed-top">
+  <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+      {% if profile and profile.logo %}
+        <img src="{{ profile.logo.url }}" alt="{% if profile %}{{ profile.full_name }}{% else %}Logo{% endif %}">
+      {% endif %}
+      <h1 class="sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</h1>
+    </a>
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="{% url 'home' %}">Accueil</a></li>
+        <li><a href="{% url 'events' %}" class="active">Evenements</a></li>
+        <li><a href="{% url 'home' %}#portfolio">Portfolio</a></li>
+        <li><a href="{% url 'home' %}#contact">Contact</a></li>
+      </ul>
+      <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+  <section class="page-title section">
+    <div class="container section-title" data-aos="fade-up">
+      <span class="subtitle">Evenements</span>
+      <h2>Rencontres, Sorties, Challenges, Competitions</h2>
+      <p>Retrouvez mes activites en photos et videos.</p>
+    </div>
+  </section>
+
+  <section class="portfolio section">
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="row gy-4">
+        {% for event in events_list %}
+          <div class="col-lg-4 col-md-6">
+            <div class="portfolio-card">
+              <div class="portfolio-image-container">
+                {% if event.cover_image %}
+                  <img src="{{ event.cover_image.url }}" alt="{{ event.title }}" class="img-fluid" loading="lazy">
+                {% else %}
+                  <img src="{% static 'monportfolio/assets/img/portfolio/portfolio-11.webp' %}" alt="{{ event.title }}" class="img-fluid" loading="lazy">
+                {% endif %}
+                <div class="portfolio-overlay">
+                  <div class="portfolio-info">
+                    <span class="project-category">{{ event.get_event_type_display }}</span>
+                    <h4>{{ event.title }}</h4>
+                  </div>
+                  <div class="portfolio-actions">
+                    {% if event.cover_image %}
+                      <a href="{{ event.cover_image.url }}" class="glightbox portfolio-link"><i class="bi bi-plus-lg"></i></a>
+                    {% endif %}
+                    <a href="{% url 'event_detail' event.id %}" class="portfolio-details"><i class="bi bi-arrow-right"></i></a>
+                  </div>
+                </div>
+              </div>
+              <div class="portfolio-meta">
+                <div class="project-tags">
+                  <span class="tag">{{ event.get_event_type_display }}</span>
+                  {% if event.location %}<span class="tag">{{ event.location }}</span>{% endif %}
+                </div>
+                <div class="project-year">{{ event.event_date|date:"Y" }}</div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p>Aucun evenement publie pour le moment. Ajoutez-en depuis l'admin Django.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="footer" class="footer">
+  <div class="container copyright text-center mt-4">
+    <p>&copy; <strong class="px-1 sitename">{% if profile %}{{ profile.full_name }}{% else %}Portfolio{% endif %}</strong> <span>Tous droits reserves</span></p>
+  </div>
+</footer>
+
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<div id="preloader"></div>
+{% endblock %}
