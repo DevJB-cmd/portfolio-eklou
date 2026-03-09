@@ -57,7 +57,6 @@ pyhanko-certvalidator==0.29.0
 pyparsing==3.3.1
 pypdf==5.9.0
 pyphen==0.17.2
-python-bidi==0.6.7
 python-dateutil==2.9.0.post0
 python-docx==1.1.2
 pytz==2025.2
